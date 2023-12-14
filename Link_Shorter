@@ -1,0 +1,47 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class LinkShortener {
+    private static final String BASE_URL = "http://short.url/";
+    private Map<String, String> shortToLongMapping;
+    private Map<String, String> longToShortMapping;
+
+    public LinkShortener() {
+        shortToLongMapping = new HashMap<>();
+        longToShortMapping = new HashMap<>();
+    }
+
+    
+    public String shorten(String longUrl) {
+        String shortUrl = generateShortUrl(longUrl);
+        shortToLongMapping.put(shortUrl, longUrl);
+        longToShortMapping.put(longUrl, shortUrl);
+        return shortUrl;
+    }
+
+    
+    public String redirect(String shortUrl) {
+        return shortToLongMapping.getOrDefault(shortUrl, "URL not found");
+    }
+
+    
+    private String generateShortUrl(String longUrl) {
+        // This is a simplified hash function; in a real-world scenario, you would use a proper algorithm.
+        int hashCode = longUrl.hashCode();
+        String shortUrl = BASE_URL + Integer.toHexString(hashCode);
+        return shortUrl;
+    }
+
+    public static void main(String[] args) {
+        LinkShortener linkShortener = new LinkShortener();
+
+        
+        String longUrl = "https://www.example.com";
+        String shortUrl = linkShortener.shorten(longUrl);
+        System.out.println("Short URL: " + shortUrl);
+
+        
+        String originalUrl = linkShortener.redirect(shortUrl);
+        System.out.println("Original URL: " + originalUrl);
+    }
+}
